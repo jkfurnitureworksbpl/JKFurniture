@@ -26,5 +26,9 @@
   },
   "engines": {
   "node": "20.x"
+  },
+  "dependencies": {
+  "tslib": "^2.6.2",
+  ...
   }
 }

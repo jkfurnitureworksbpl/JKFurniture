@@ -1,0 +1,216 @@
+/* App Loading Screen */
+.app-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeOut 0.5s ease-out 0.5s forwards;
+}
+
+.loader-content {
+  text-align: center;
+  color: white;
+}
+
+.loader-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.furniture-icon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+.chair-leg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 20px;
+  background: white;
+  border-radius: 2px;
+}
+
+.chair-leg::before,
+.chair-leg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 15px;
+  background: white;
+  border-radius: 2px;
+}
+
+.chair-leg::before {
+  left: -12px;
+}
+
+.chair-leg::after {
+  right: -12px;
+}
+
+.chair-seat {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 8px;
+  background: white;
+  border-radius: 4px;
+}
+
+.chair-back {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 25px;
+  background: white;
+  border-radius: 4px;
+}
+
+.loader-logo h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* App Styles */
+.App {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Social Media Links */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 0.25rem 0;
+}
+
+.social-link:hover {
+  color: #60a5fa;
+  transform: translateX(5px);
+}
+
+.social-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.social-icon.linkedin {
+  background: #0077b5;
+  color: white;
+}
+
+.social-icon.facebook {
+  background: #1877f2;
+  color: white;
+}
+
+.social-icon.instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: white;
+  font-size: 0.9rem;
+}
+
+.social-link:hover .social-icon {
+  transform: scale(1.1);
+}
+
+/* Footer Links Styling */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 0.25rem 0;
+}
+
+.footer-link:hover {
+  color: #60a5fa;
+  transform: translateX(5px);
+}
+
+.footer-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover .footer-icon {
+  transform: scale(1.1);
+}

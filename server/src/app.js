@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 // Node.js 18+ has built-in fetch, no polyfill needed
@@ -16,12 +17,19 @@ connectSupabase();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, '..', 'build')));
+
 // Import routes
 const hoverTabsRoutes = require('./routes/hoverTabsRoutes');
 const productImagesRoutes = require('./routes/productImagesRoutes');
 
-// Routes
-app.get('/', (req, res) => {
+// API routes (must be before catch-all route)
+app.use('/api/hover-tabs', hoverTabsRoutes);
+app.use('/api/product-images', productImagesRoutes);
+
+// API status endpoint
+app.get('/api', (req, res) => {
   res.json({ 
     message: 'Furniture API Server',
     version: '1.0.0',
@@ -32,10 +40,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// API routes
-app.use('/api/hover-tabs', hoverTabsRoutes);
-app.use('/api/product-images', productImagesRoutes);
-
 // Health check
 app.get('/health', (req, res) => {
   res.json({ 
@@ -43,6 +47,11 @@ app.get('/health', (req, res) => {
     message: 'Server is running',
     timestamp: new Date().toISOString()
   });
+});
+
+// Catch-all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 // Start server

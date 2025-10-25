@@ -88,9 +88,8 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
-# Build directories
+# Build directories (except build/ which contains React app for deployment)
 dist/
-build/
 
 # Temporary files
 tmp/

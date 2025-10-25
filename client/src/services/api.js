@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:3002/api';
+// Use environment variable for API URL, fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 // Fetch hover tabs from backend
 export const fetchHoverTabs = async () => {

@@ -8,7 +8,7 @@ const getProductImages = async (req, res) => {
     console.log('🔍 Fetching product images from PostgreSQL database...');
     
     // Query product images from export_data.product_images with limit of 6
-    const result = await query('SELECT * FROM export_data.product_images ORDER BY img_id ASC LIMIT 6');
+    const result = await query('SELECT * FROM export_data.product_images ORDER BY img_id ASC LIMIT 8');
 
     const rows = Array.isArray(result?.rows) ? result.rows : [];
     console.log('📊 Result from PostgreSQL:', rows);

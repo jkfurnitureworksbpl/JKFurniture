@@ -1,68 +1,18 @@
-const https = require('https');
-const { URL } = require('url');
+const { query } = require('../services/databaseService');
 
 // @desc    Get all hover tabs
 // @route   GET /api/hover-tabs
 // @access  Public
 const getHoverTabs = async (req, res) => {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    console.log('🔍 Fetching from PostgreSQL database...');
     
-    if (!supabaseUrl || !supabaseKey) {
-      console.log('❌ Supabase credentials not configured');
-      return res.status(500).json({
-        success: false,
-        error: 'Supabase credentials not configured. Please check your environment variables.'
-      });
-    }
-
-    // Make direct HTTP request to Supabase (same as Postman)
-    console.log('🔍 Fetching from Supabase using direct HTTP request...');
+    // Query all products from the export_data.products table
+    const result = await query('SELECT * FROM export_data.products');
     
-    const data = await new Promise((resolve, reject) => {
-      const url = new URL(`${supabaseUrl}/rest/v1/products?select=*`);
-      
-      const options = {
-        hostname: url.hostname,
-        port: url.port || 443,
-        path: url.pathname + url.search,
-        method: 'GET',
-        headers: {
-          'apikey': supabaseKey,
-          'Content-Type': 'application/json'
-        }
-      };
-
-      const req = https.request(options, (res) => {
-        let data = '';
-        
-        res.on('data', (chunk) => {
-          data += chunk;
-        });
-        
-        res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            try {
-              const jsonData = JSON.parse(data);
-              resolve(jsonData);
-            } catch (error) {
-              reject(new Error(`Failed to parse JSON: ${error.message}`));
-            }
-          } else {
-            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
-          }
-        });
-      });
-      
-      req.on('error', (error) => {
-        reject(new Error(`Request failed: ${error.message}`));
-      });
-      
-      req.end();
-    });
-    console.log("✅ Supabase data received:", data);
-    console.log("📊 Total records from Supabase:", data ? data.length : 0);
+    const data = result.rows;
+    console.log("✅ PostgreSQL data received:", data);
+    console.log("📊 Total records from PostgreSQL:", data ? data.length : 0);
     
     // Add subcategories to each tab if they don't exist
     const tabsWithSubcategories = data.map(tab => ({

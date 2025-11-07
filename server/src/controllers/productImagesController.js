@@ -1,77 +1,38 @@
-const https = require('https');
-const { URL } = require('url');
+const { query } = require('../services/databaseService');
 
 // @desc    Get all product images
 // @route   GET /api/product-images
 // @access  Public
 const getProductImages = async (req, res) => {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    console.log('🔍 Fetching product images from PostgreSQL database...');
     
-    if (!supabaseUrl || !supabaseKey) {
-      console.log('❌ Supabase credentials not configured');
-      return res.status(500).json({
-        success: false,
-        error: 'Supabase credentials not configured. Please check your environment variables.'
-      });
-    }
+    // Query product images from export_data.product_images with limit of 6
+    const result = await query('SELECT * FROM export_data.product_images ORDER BY img_id ASC LIMIT 6');
 
-    // Make direct HTTP request to Supabase
-    console.log('🔍 Fetching product images from Supabase using direct HTTP request...');
-    
-    const data = await new Promise((resolve, reject) => {
-      const url = new URL(`${supabaseUrl}/rest/v1/product_images?select=*&limit=6`);
-      
-      const options = {
-        hostname: url.hostname,
-        port: url.port || 443,
-        path: url.pathname + url.search,
-        method: 'GET',
-        headers: {
-          'apikey': supabaseKey,
-          'Content-Type': 'application/json'
-        }
+    const rows = Array.isArray(result?.rows) ? result.rows : [];
+    console.log('📊 Result from PostgreSQL:', rows);
+
+    const productImages = rows.map((row) => {
+      const { doc_src, img_doc_src, ...rest } = row;
+      return {
+        ...rest,
+        img_doc_src: img_doc_src || doc_src || null,
       };
-
-      const req = https.request(options, (res) => {
-        let data = '';
-        
-        res.on('data', (chunk) => {
-          data += chunk;
-        });
-        
-        res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            try {
-              const jsonData = JSON.parse(data);
-              resolve(jsonData);
-            } catch (error) {
-              reject(new Error(`Failed to parse JSON: ${error.message}`));
-            }
-          } else {
-            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
-          }
-        });
-      });
-      
-      req.on('error', (error) => {
-        reject(new Error(`Request failed: ${error.message}`));
-      });
-      
-      req.end();
     });
 
-    // console.log("✅ Supabase product images received:", data);
-    console.log("📊 Total product images from Supabase:", data ? data.length : 0);
-    
+    console.log('📊 Total product images from PostgreSQL:', productImages.length);
+
     res.json({
       success: true,
-      data: data
+      data: productImages,
     });
     
   } catch (error) {
     console.error('Error fetching product images:', error);
+    if (error?.stack) {
+      console.error(error.stack);
+    }
     
     return res.status(500).json({
       success: false,
@@ -94,73 +55,39 @@ const getProductImagesByCategory = async (req, res) => {
       });
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    console.log(`🔍 Fetching product images for category: ${category} from PostgreSQL...`);
     
-    if (!supabaseUrl || !supabaseKey) {
-      console.log('❌ Supabase credentials not configured');
-      return res.status(500).json({
-        success: false,
-        error: 'Supabase credentials not configured. Please check your environment variables.'
-      });
-    }
+    // Query product images from export_data.product_images filtered by category
+    const result = await query(
+      'SELECT * FROM export_data.product_images WHERE img_cat = $1 ORDER BY img_id ASC LIMIT 6',
+      [category]
+    );
+    
+    const rows = Array.isArray(result?.rows) ? result.rows : [];
 
-    // Make direct HTTP request to Supabase with category filter
-    console.log(`🔍 Fetching product images for category: ${category} from Supabase...`);
-    
-    const data = await new Promise((resolve, reject) => {
-      const url = new URL(`${supabaseUrl}/rest/v1/product_images?select=*&img_cat=eq.${encodeURIComponent(category)}&limit=6`);      
-      const options = {
-        hostname: url.hostname,
-        port: url.port || 443,
-        path: url.pathname + url.search,
-        method: 'GET',
-        headers: {
-          'apikey': supabaseKey,
-          'Content-Type': 'application/json'
-        }
+    const productImages = rows.map((row) => {
+      const { doc_src, img_doc_src, ...rest } = row;
+      return {
+        ...rest,
+        img_doc_src: img_doc_src || doc_src || null,
       };
-
-      const req = https.request(options, (res) => {
-        let data = '';
-        
-        res.on('data', (chunk) => {
-          data += chunk;
-        });
-        
-        res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            try {
-              const jsonData = JSON.parse(data);
-              resolve(jsonData);
-            } catch (error) {
-              reject(new Error(`Failed to parse JSON: ${error.message}`));
-            }
-          } else {
-            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
-          }
-        });
-      });
-      
-      req.on('error', (error) => {
-        reject(new Error(`Request failed: ${error.message}`));
-      });
-      
-      req.end();
     });
 
-    console.log(`✅ Supabase product images for category '${category}' received:`, data);
-    console.log(`📊 Total product images for category '${category}':`, data ? data.length : 0);
-    
+    console.log(`✅ PostgreSQL product images for category '${category}' received:`, productImages);
+    console.log(`📊 Total product images for category '${category}':`, productImages.length);
+
     res.json({
       success: true,
-      data: data,
-      category: category,
-      count: data ? data.length : 0
+      data: productImages,
+      category,
+      count: productImages.length,
     });
     
   } catch (error) {
     console.error(`Error fetching product images for category '${req.params.category}':`, error);
+    if (error?.stack) {
+      console.error(error.stack);
+    }
     
     return res.status(500).json({
       success: false,

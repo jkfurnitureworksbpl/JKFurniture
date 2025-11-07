@@ -5,13 +5,15 @@ require('dotenv').config();
 
 // Node.js 18+ has built-in fetch, no polyfill needed
 
-const { connectSupabase } = require('./services/supabaseService');
+const { connectDatabase } = require('./services/databaseService');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Connect to Supabase
-connectSupabase();
+// Connect to PostgreSQL database (async, will log connection status)
+connectDatabase().catch(err => {
+  console.error('Failed to initialize database connection:', err);
+});
 
 // Middleware
 app.use(cors());

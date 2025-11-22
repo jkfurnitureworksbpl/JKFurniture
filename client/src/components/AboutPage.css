@@ -13,6 +13,12 @@
   padding-top: 80px;
 }
 
+@media (max-width: 868px) {
+   .about-page {
+      padding-top: 200px;
+    }
+}
+
 /* Integrated Header */
 .integrated-header {
   text-align: center;

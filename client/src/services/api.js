@@ -1,6 +1,9 @@
 // Use environment variable for API URL, fallback based on environment
-const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3002/api');
+//const API_BASE_URL = process.env.REACT_APP_API_URL || 
+  //(process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3002/api');
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
+
 
 const normalizeHoverTabRecord = (record, index = 0) => {
   if (!record || typeof record !== 'object') return record;

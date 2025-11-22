@@ -6,6 +6,12 @@
   padding-top: 80px;
 }
 
+@media (max-width: 868px) {
+   .home-page {
+      padding-top: 140px;
+    }
+}
+
 /* Single Home Section with Background Image */
 .home-main-section {
   position: relative;

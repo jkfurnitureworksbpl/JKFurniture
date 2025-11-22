@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
-import { fetchHoverTabs, fetchProductImages, fetchProductImagesBaseOnCategory } from '../services/api';
+import Navbar from './Navbar.js';
+import { fetchHoverTabs, fetchProductImages, fetchProductImagesBaseOnCategory } from '../services/api.js';
 import './CatalogPage.css';
 
 const CatalogPage = () => {

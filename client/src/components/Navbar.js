@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { fetchHoverTabs } from '../services/api';
+import { fetchHoverTabs } from '../services/api.js';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -92,6 +92,7 @@ const Navbar = () => {
     <nav className="navbar_visible">
       <div className="container-navbar">
         <div className="nav-content">
+          <div className='nav-content1'>
             <div className="footer-logo">
                 {/* <span className="logo-icon"></span> */}
                 <img
@@ -101,8 +102,9 @@ const Navbar = () => {
                   loading="lazy"
                 />
             </div>
-          <div className="logo">
-            <span className="logo-text">JKExportHub</span>
+            <div className="logo">
+              <span className="logo-text">JKExportHub</span>
+            </div>
           </div>
           
           {/* Desktop Navigation - Right Side */}

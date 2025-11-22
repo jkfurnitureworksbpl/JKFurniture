@@ -14,6 +14,12 @@
   z-index: 1;
 }
 
+@media (max-width: 868px) {
+   .catalog-page {
+      padding-top: 128px;
+    }
+}
+
 .catalog-main-section {
   position: relative;
   min-height: 100vh;

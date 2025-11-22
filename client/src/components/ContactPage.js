@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
-import { fetchHoverTabs } from '../services/api';
+import Navbar from './Navbar.js';
+import { fetchHoverTabs } from '../services/api.js';
 import './ContactPage.css';
 
 const ContactPage = () => {

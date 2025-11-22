@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AnimationPage from './components/AnimationPage';
-import HomePage from './components/HomePage';
-import CatalogPage from './components/CatalogPage';
-import AboutPage from './components/AboutPage';
-import ContactPage from './components/ContactPage';
-import Footer from './components/Footer';
+import AnimationPage from './components/AnimationPage.js';
+import HomePage from './components/HomePage.js';
+import CatalogPage from './components/CatalogPage.js';
+import AboutPage from './components/AboutPage.js';
+import ContactPage from './components/ContactPage.js';
+import Footer from './components/Footer.js';
 import './App.css';
 
 function App() {

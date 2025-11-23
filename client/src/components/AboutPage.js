@@ -5,34 +5,34 @@ import './AboutPage.css';
 const AboutPage = () => {
   const teamMembers = [
     {
-      name: 'J.K. Sharma',
+      name: 'Mr. Jaleel Ahmed',
       role: 'Founder & Managing Director',
       image: '👨‍💼',
-      bio: 'With over 30 years of experience in manufacturing and export, J.K. Sharma founded JK Furniture Works and expanded into global markets with JKExportHub.'
+      bio: 'With over 35 years of experience in global trade, Mr. Ahmed is the driving force behind our vision. His deep understanding of international markets, export regulations, and business strategy has positioned our company as a trusted global partner. Calm, decisive, and forward-thinking — he ensures every shipment reflects our commitment to excellence.'
     },
     {
-      name: 'Priya Sharma',
-      role: 'Head of Operations',
-      image: '👩‍💼',
-      bio: 'Leading our day-to-day operations with expertise in supply chain management and quality control across all our divisions.'
+      name: 'Mohammad Yasir',
+      role: 'Head of Export Documentation & Compliance',
+      image: '👨‍💼',
+      bio: 'Mr. Yasir specializes in international trade documentation, ensuring each consignment meets INCOTERMS, customs, and buyer-specific standards. His meticulous approach minimizes delays and maintains seamless export operations.'
     },
     {
-      name: 'Rajesh Kumar',
-      role: 'Export Manager',
-      image: '👨‍💻',
-      bio: 'Specializing in international trade compliance and logistics, ensuring smooth export operations to global markets.'
+      name: 'Mr. Mohammad Faiz',
+      role: 'Procurement & Supply Chain Manager',
+      image: '👨',
+      bio: 'Mr. Faiz manages sourcing and vendor relations with precision, ensuring top-tier product quality and timely deliveries. His coordination skills and strong supplier network guarantee smooth movement from production to port.'
     },
     {
-      name: 'Dr. Anjali Patel',
-      role: 'Wellness Division Head',
-      image: '👩‍⚕️',
-      bio: 'Overseeing our Nutrezza brand and Vedglow product development, bringing expertise in natural health solutions.'
+      name: 'Mr. Mohammad Zaid',
+      role: 'International Sales & Client Relations Lead',
+      image: '👨‍💼',
+      bio: 'Mr. Zaid represents our brand across global markets, fostering trust and long-term partnerships. With keen insight into market trends and buyer expectations, he bridges communication between clients and our operations team.'
     },
     {
-      name: 'Vikram Singh',
-      role: 'Design & Innovation Lead',
+      name: 'Mr. Mohammad Afridi',
+      role: 'Finance & Export Payments Head',
       image: '👨‍🎨',
-      bio: 'Driving creative design solutions and product innovation across our furniture and wellness product lines.'
+      bio: 'Mr. Afridi oversees international transactions, foreign exchange, and export incentives with over a decade of financial expertise. His sound management ensures secure payments, regulatory compliance, and financial efficiency in every export.'
     }
   ];
 

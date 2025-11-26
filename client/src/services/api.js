@@ -120,3 +120,33 @@ export const fetchProductImagesBaseOnCategory = async (categoryName) => {
     throw error;
   }
 };
+
+/**
+ * Submit contact form
+ */
+export const submitContactForm = async (formData) => {
+  console.log('Submitting contact form...');
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    console.log('Contact Form API Response:', data);
+
+    if (data.success) {
+      return data;
+    } else {
+      throw new Error(data.error || 'Failed to submit contact form');
+    }
+  } catch (error) {
+    console.error('Error submitting contact form:', error);
+    throw error;
+  }
+};
+

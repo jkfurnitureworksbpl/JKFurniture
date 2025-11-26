@@ -25,10 +25,12 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 // Import routes
 const hoverTabsRoutes = require('./routes/hoverTabsRoutes');
 const productImagesRoutes = require('./routes/productImagesRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 // API routes (must be before catch-all route)
 app.use('/api/hover-tabs', hoverTabsRoutes);
 app.use('/api/product-images', productImagesRoutes);
+app.use('/api/contact', contactRoutes);
 
 // API status endpoint
 app.get('/api', (req, res) => {
@@ -37,7 +39,8 @@ app.get('/api', (req, res) => {
     version: '1.0.0',
     endpoints: {
       hoverTabs: '/api/hover-tabs',
-      productImages: '/api/product-images'
+      productImages: '/api/product-images',
+      contact: '/api/contact'
     }
   });
 });
@@ -61,6 +64,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📋 Hover Tabs API: http://localhost:${PORT}/api/hover-tabs`);
   console.log(`🖼️ Product Images API: http://localhost:${PORT}/api/product-images`);
+  console.log(`📧 Contact API: http://localhost:${PORT}/api/contact`);
   console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
 });
 

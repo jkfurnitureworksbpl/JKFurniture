@@ -8,31 +8,31 @@ const AboutPage = () => {
       name: 'Mr. Jaleel Ahmed',
       role: 'Founder & Managing Director',
       image: '👨‍💼',
-      bio: 'With over 35 years of experience in global trade, Mr. Ahmed is the driving force behind our vision. His deep understanding of international markets, export regulations, and business strategy has positioned our company as a trusted global partner. Calm, decisive, and forward-thinking — he ensures every shipment reflects our commitment to excellence.'
+      bio: 'With 35+ years of global trade experience, Mr. Ahmed leads our operations with strategic insight and a commitment to excellence. His expertise in international markets and export regulations ensures every shipment meets the highest standards.'
     },
     {
       name: 'Mohammad Yasir',
       role: 'Head of Export Documentation & Compliance',
       image: '👨‍💼',
-      bio: 'Mr. Yasir specializes in international trade documentation, ensuring each consignment meets INCOTERMS, customs, and buyer-specific standards. His meticulous approach minimizes delays and maintains seamless export operations.'
+      bio: 'Mr. Yasir manages all export documentation with precision, ensuring full compliance with INCOTERMS, customs rules, and buyer requirements. His accuracy keeps our consignments smooth and delay-free.'
     },
     {
       name: 'Mr. Mohammad Faiz',
       role: 'Procurement & Supply Chain Manager',
       image: '👨',
-      bio: 'Mr. Faiz manages sourcing and vendor relations with precision, ensuring top-tier product quality and timely deliveries. His coordination skills and strong supplier network guarantee smooth movement from production to port.'
+      bio: 'Mr. Faiz oversees sourcing, vendor coordination, and quality control. His strong supplier network and logistical expertise ensure timely, reliable movement of goods from production to port.'
     },
     {
       name: 'Mr. Mohammad Zaid',
       role: 'International Sales & Client Relations Lead',
       image: '👨‍💼',
-      bio: 'Mr. Zaid represents our brand across global markets, fostering trust and long-term partnerships. With keen insight into market trends and buyer expectations, he bridges communication between clients and our operations team.'
+      bio: 'Mr. Zaid manages global client communications with professionalism and cultural understanding. His focus on trust, responsiveness, and market awareness strengthens long-term international partnerships.'
     },
     {
       name: 'Mr. Mohammad Afridi',
       role: 'Finance & Export Payments Head',
       image: '👨‍🎨',
-      bio: 'Mr. Afridi oversees international transactions, foreign exchange, and export incentives with over a decade of financial expertise. His sound management ensures secure payments, regulatory compliance, and financial efficiency in every export.'
+      bio: 'Mr. Afridi handles international payments, forex, and export incentives. His financial oversight ensures secure transactions, regulatory compliance, and optimized profitability.'
     }
   ];
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar.js';
-import { fetchHoverTabs } from '../services/api.js';
+import { fetchHoverTabs, submitContactForm } from '../services/api.js';
 import './ContactPage.css';
 
 const ContactPage = () => {
@@ -14,6 +14,8 @@ const ContactPage = () => {
   });
   const [hoverTabs, setHoverTabs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState({ type: '', text: '' });
 
   // Fetch hover tabs from API
   useEffect(() => {
@@ -42,17 +44,43 @@ const ContactPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Thank you for your message! We\'ll get back to you soon.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      product: '',
-      message: ''
-    });
+    
+    setIsSubmitting(true);
+    setSubmitMessage({ type: '', text: '' });
+
+    try {
+      const result = await submitContactForm(formData);
+      
+      setSubmitMessage({
+        type: 'success',
+        text: result.message || 'Thank you for your message! We\'ll get back to you soon.'
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        product: '',
+        message: ''
+      });
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSubmitMessage({ type: '', text: '' });
+      }, 5000);
+
+    } catch (error) {
+      setSubmitMessage({
+        type: 'error',
+        text: error.message || 'Failed to send message. Please try again later.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWhatsAppClick = () => {
@@ -155,6 +183,11 @@ const ContactPage = () => {
           <div className="form-map-container">
             <div className="contact-form-container">
               <h2 className="form-title">Send us a Message</h2>
+              {submitMessage.text && (
+                <div className={`submit-message ${submitMessage.type}`}>
+                  {submitMessage.text}
+                </div>
+              )}
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group">
@@ -244,8 +277,8 @@ const ContactPage = () => {
                     required
                   ></textarea>
                 </div>
-                <button type="submit" className="submit-btn">
-                  Send Message
+                <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>

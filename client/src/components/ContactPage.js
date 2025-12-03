@@ -95,7 +95,7 @@ const ContactPage = () => {
     const subject = 'Inquiry from JKExportHub Website';
     const body = 'Hello, I would like to get in touch about your furniture services.';
     const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoUrl;
+      window.location.href = mailtoUrl;
   };
 
   const handlePhoneClick = () => {
@@ -130,7 +130,7 @@ const ContactPage = () => {
     {
       icon: '✉️',
       title: 'Email Us',
-      details: ['hello@JKExportHub.com', 'jkfurnitureworksbpl@gmail.com', 'We respond within 24 hours'],
+      details: ['contact@jkexporthub.com', 'We respond within 24 hours'],
       isClickable: true,
       onClick: handleEmailClick
     },

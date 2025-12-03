@@ -37,10 +37,12 @@ const sendContact = async (req, res) => {
       product: product || '',
       message
     };
+     
 
+    // this can be used later if needed
     // Send email to seller (jkexporthub@gmail.com)
-    const sellerEmailResult = await sendContactEmail(formData);
-    console.log('✅ Email sent to seller');
+    // const sellerEmailResult = await sendContactEmail(formData);
+    // console.log('✅ Email sent to seller');
 
     // Send confirmation email to client
     let confirmationResult = null;
@@ -55,7 +57,7 @@ const sendContact = async (req, res) => {
     res.json({
       success: true,
       message: 'Contact form submitted successfully. We will get back to you soon!',
-      messageId: sellerEmailResult.messageId,
+      // messageId: sellerEmailResult.messageId,
       confirmationSent: confirmationResult !== null
     });
 

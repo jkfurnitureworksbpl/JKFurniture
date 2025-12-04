@@ -91,7 +91,7 @@ const ContactPage = () => {
   };
 
   const handleEmailClick = () => {
-    const email = 'hello@JKExportHub.com';
+    const email = 'contact@jkexporthub.com';
     const subject = 'Inquiry from JKExportHub Website';
     const body = 'Hello, I would like to get in touch about your furniture services.';
     const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

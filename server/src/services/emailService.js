@@ -3,6 +3,14 @@ const nodemailer = require('nodemailer');
 // Cache transporter to reuse connection
 let cachedTransporter = null;
 
+// Reset cached transporter (useful when connection fails)
+const resetTransporter = () => {
+  if (cachedTransporter) {
+    cachedTransporter.close();
+    cachedTransporter = null;
+  }
+};
+
 const createTransporter = () => {
   // Return cached transporter if available
   if (cachedTransporter) {
@@ -26,6 +34,13 @@ const createTransporter = () => {
     throw new Error('EMAIL_USER and EMAIL_PASS must be set in .env file');
   }
 
+  console.log('📧 Creating SMTP transporter with config:', {
+    host: emailHost,
+    port: emailPort,
+    secure: emailSecure,
+    user: emailUser
+  });
+
   const transporterConfig = {
     host: emailHost,
     port: emailPort,
@@ -35,19 +50,26 @@ const createTransporter = () => {
       pass: emailPass
     },
     tls: {
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
+      minVersion: 'TLSv1'
     },
-    // Reduced timeouts for faster failure
-    connectionTimeout: 5000,  // 5 seconds instead of 20
-    greetingTimeout: 5000,    // 5 seconds instead of 20
-    socketTimeout: 10000,     // 10 seconds instead of 20
+    // Increased timeouts for better reliability
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
+    // For TLS connections, require TLS upgrade
     requireTLS: !emailSecure,
-    // Disable debug logging for better performance
-    debug: false,
-    logger: false
+    // Enable debug logging
+    debug: true,
+    logger: true,
+    // Pool connections for better performance
+    pool: true,
+    maxConnections: 1,
+    maxMessages: 3
   };
 
-  if (emailSecure && emailHost.includes('hostinger')) {
+  // For SSL connections (port 465), remove requireTLS
+  if (emailSecure) {
     delete transporterConfig.requireTLS;
   }
 
@@ -58,70 +80,33 @@ const createTransporter = () => {
 const handleEmailError = (error) => {
   console.error('❌ Email error:', error.message);
   console.error('   Error code:', error.code);
-  console.error('   Full error:', error);
-
-  if (error.message.includes('Greeting never received') || error.message.includes('ECONNREFUSED')) {
-    throw new Error('Cannot connect to SMTP server. Check EMAIL_HOST, EMAIL_PORT, and EMAIL_SECURE settings. For port 465 use EMAIL_SECURE=true, for port 587 use EMAIL_SECURE=false.');
+  console.error('   Error stack:', error.stack);
+  
+  // Reset cached transporter on connection errors
+  if (error.code === 'ETIMEDOUT' || error.code === 'ECONNREFUSED' || error.code === 'ESOCKET') {
+    console.log('🔄 Resetting cached transporter due to connection error');
+    resetTransporter();
   }
 
-  if (error.message.includes('Invalid login') || error.message.includes('BadCredentials') || error.message.includes('Authentication failed')) {
-    throw new Error('SMTP authentication failed. Check your email credentials in .env file.');
+  if (error.message.includes('Greeting never received') || error.message.includes('ECONNREFUSED') || error.code === 'ECONNREFUSED') {
+    throw new Error(`Cannot connect to SMTP server ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}. Check EMAIL_HOST, EMAIL_PORT, and EMAIL_SECURE settings.`);
   }
 
-  if (error.message.includes('ETIMEDOUT') || error.message.includes('timeout') || error.message.includes('Connection timeout')) {
+  if (error.message.includes('Invalid login') || error.message.includes('BadCredentials') || error.message.includes('Authentication failed') || error.code === 'EAUTH') {
+    throw new Error('SMTP authentication failed. Check EMAIL_USER and EMAIL_PASS in .env file.');
+  }
+
+  if (error.message.includes('ETIMEDOUT') || error.message.includes('timeout') || error.message.includes('Connection timeout') || error.code === 'ETIMEDOUT') {
     console.error('⚠️  Connection timeout troubleshooting:');
-    console.error('   1. Try port 587 with EMAIL_SECURE=false (TLS)');
-    console.error('   2. Check if your firewall is blocking port', process.env.EMAIL_PORT);
-    console.error('   3. Verify EMAIL_HOST is correct:', process.env.EMAIL_HOST);
-    console.error('   4. For Hostinger, try: EMAIL_HOST=smtp.hostinger.com, EMAIL_PORT=587, EMAIL_SECURE=false');
-    throw new Error(`SMTP connection timeout to ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}. Try port 587 with EMAIL_SECURE=false or check firewall settings.`);
+    console.error('   Current config:', {
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: process.env.EMAIL_SECURE
+    });
+    throw new Error(`SMTP connection timeout to ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}. Check firewall settings or try different port.`);
   }
 
   throw error;
-};
-
-const sendContactEmail = async (formData) => {
-  const startTime = Date.now();
-  try {
-    const transporter = createTransporter();
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: 'jkexporthub@gmail.com',
-      subject: `Contact Form Submission: ${formData.subject || 'General Inquiry'}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${formData.name}</p>
-        <p><strong>Email:</strong> ${formData.email}</p>
-        <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
-        <p><strong>Subject:</strong> ${formData.subject || 'Not provided'}</p>
-        <p><strong>Product:</strong> ${formData.product || 'Not provided'}</p>
-        <p><strong>Message:</strong></p>
-        <p>${formData.message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><small>This email was sent from the JKExportHub contact form.</small></p>
-      `,
-      text: `
-        New Contact Form Submission
-        Name: ${formData.name}
-        Email: ${formData.email}
-        Phone: ${formData.phone || 'Not provided'}
-        Subject: ${formData.subject || 'Not provided'}
-        Product: ${formData.product || 'Not provided'}
-        Message: ${formData.message}
-        ---
-        This email was sent from the JKExportHub contact form.
-      `
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    const duration = Date.now() - startTime;
-    console.log(`✅ Contact email sent in ${duration}ms:`, info.messageId);
-    return { success: true, messageId: info.messageId };
-  } catch (error) {
-    const duration = Date.now() - startTime;
-    console.error(`❌ Email failed after ${duration}ms`);
-    handleEmailError(error);
-  }
 };
 
 const sendConfirmationEmail = async (formData) => {
@@ -179,15 +164,16 @@ const sendConfirmationEmail = async (formData) => {
     const info = await transporter.sendMail(mailOptions);
     const duration = Date.now() - startTime;
     console.log(`✅ Confirmation email sent in ${duration}ms:`, formData.email);
+    console.log(`   Response:`, info.response);
     return { success: true, messageId: info.messageId };
   } catch (error) {
     const duration = Date.now() - startTime;
     console.error(`❌ Confirmation email failed after ${duration}ms`);
-    handleEmailError(error);
+    console.error(`   Error details:`, error);
+    throw handleEmailError(error);
   }
 };
 
 module.exports = {
-  sendContactEmail,
   sendConfirmationEmail
 };
